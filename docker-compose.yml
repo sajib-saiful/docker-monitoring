@@ -1,4 +1,5 @@
 ---
+volumes: { prometheus-data: { driver: local }, grafana-data: { driver: local } }
 services:
   prometheus:
     image: docker.io/prom/prometheus:v2.54.1
@@ -95,5 +96,3 @@ services:
 networks:
   monitoring-network:
     driver: bridge
-
-volumes: { prometheus-data: { driver: local }, grafana-data: { driver: local } }
