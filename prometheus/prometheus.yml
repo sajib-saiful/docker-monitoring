@@ -42,3 +42,20 @@ scrape_configs:
       - targets:
           - '192.168.100.145:8080'  # Assuming cAdvisor is running on this IP and port
           - '192.168.100.167:8080'  # Uncomment and add other cAdvisor instances as needed
+  
+  - job_name: blackbox
+    metrics_path: /probe
+    scrape_interval: 5s
+    params:
+      module: [http_2xx]
+    static_configs:
+    - targets:
+      - 192.168.100.145:9090
+      - web:2112/health
+    relabel_configs:
+    - source_labels: [__address__]
+      target_label: __param_target
+    - source_labels: [__param_target]
+      target_label: instance
+    - target_label: __address__
+      replacement: blackbox:9115
