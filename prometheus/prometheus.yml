@@ -28,7 +28,7 @@ scrape_configs:
       - targets:
           - 192.168.100.145:9800
           - 192.168.100.167:9100
-          -192.168.100.145:9115 #Blackbox
+          - 192.168.100.145:9115 #Blackbox
 
   - job_name: docker
       # metrics_path defaults to '/metrics'
