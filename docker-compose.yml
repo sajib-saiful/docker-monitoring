@@ -16,47 +16,7 @@ networks:
     driver: bridge
 
 services:
-  prometheus:
-    image: docker.io/prom/prometheus:v2.54.1
-    container_name: prometheus
-    ports:
-      - 9090:9090
-    volumes:
-      - /etc/prometheus/:/etc/prometheus:ro
-      - prometheus-data:/prometheus
-    restart: unless-stopped
-    command:
-      - "--config.file=/etc/prometheus/prometheus.yml"
-    deploy:
-      resources:
-        limits:
-          cpus: "1.0" # Limit to 1 CPU core
-          memory: "2048M" # Limit memory to 2 GB
-    networks:
-      - monitoring-network
-    dns:
-      - 8.8.8.8
-      - 1.1.1.1
-
-  grafana:
-    image: docker.io/grafana/grafana-oss:11.2.0
-    container_name: grafana
-    ports:
-      - "3000:3000"
-    volumes:
-      - grafana-data:/var/lib/grafana
-    restart: unless-stopped
-    deploy:
-      resources:
-        limits:
-          cpus: "1.0" # Limit to 1 CPU core
-          memory: "2048M" # Limit memory to 2 GB
-    networks:
-      - monitoring-network
-    dns:
-      - 8.8.8.8
-      - 1.1.1.1
-
+  
   node-exporter:
     image: prom/node-exporter:latest
     container_name: node-exporter
@@ -88,9 +48,6 @@ services:
     restart: unless-stopped
     networks:
       - monitoring-network
-    dns:
-      - 8.8.8.8
-      - 1.1.1.1
 
   blackbox:
     image: quay.io/prometheus/blackbox-exporter:latest
@@ -107,3 +64,40 @@ services:
     dns:
       - 8.8.8.8
       - 1.1.1.1
+      
+  prometheus:
+      image: docker.io/prom/prometheus:v2.54.1
+      container_name: prometheus
+      ports:
+        - 9090:9090
+      volumes:
+        - /etc/prometheus/:/etc/prometheus:ro
+        - prometheus-data:/prometheus
+      restart: unless-stopped
+      command:
+        - "--config.file=/etc/prometheus/prometheus.yml"
+      deploy:
+        resources:
+          limits:
+            cpus: "1.0" # Limit to 1 CPU core
+            memory: "2048M" # Limit memory to 2 GB
+      depends_on:
+      - blackbox
+      networks:
+        - monitoring-network
+
+    grafana:
+      image: docker.io/grafana/grafana-oss:11.2.0
+      container_name: grafana
+      ports:
+        - "3000:3000"
+      volumes:
+        - grafana-data:/var/lib/grafana
+      restart: unless-stopped
+      deploy:
+        resources:
+          limits:
+            cpus: "1.0" # Limit to 1 CPU core
+            memory: "2048M" # Limit memory to 2 GB
+      networks:
+        - monitoring-network
