@@ -1,9 +1,9 @@
 Steps:
 
-## Install git-core if not installed in your system
+# Install git-core if not installed in your system
 => sudo yum install git-core -y
 
-## Download the repo folder from github 
+# Download the repo folder from github 
 => cd /etc/
 => git clone https://github.com/sajib-saiful/docker-monitoring.git
 
