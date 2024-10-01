@@ -42,7 +42,7 @@ scrape_configs:
           - '192.168.100.145:8080'  # Assuming cAdvisor is running on this IP and port
           - '192.168.100.167:8080'  # Uncomment and add other cAdvisor instances as needed
   
-  - job_name: 'blackbox'
+  - job_name: 'blackbox-exporter'
     metrics_path: /probe
     params:
         module: [http_2xx]
