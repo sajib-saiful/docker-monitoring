@@ -32,11 +32,10 @@ services:
         limits:
           cpus: "1.0" # Limit to 1 CPU core
           memory: "2048M" # Limit memory to 2 GB
-    depends_on:
-    - blackbox
     networks:
       - monitoring-network
-
+    depends_on:
+      - blackbox
   grafana:
     image: docker.io/grafana/grafana-oss:11.2.0
     container_name: grafana
@@ -52,6 +51,9 @@ services:
           memory: "2048M" # Limit memory to 2 GB
     networks:
       - monitoring-network
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
 
   node-exporter:
     image: prom/node-exporter:latest
@@ -84,6 +86,9 @@ services:
     restart: unless-stopped
     networks:
       - monitoring-network
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
 
   blackbox:
     image: quay.io/prometheus/blackbox-exporter:latest
