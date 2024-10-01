@@ -1,5 +1,20 @@
 ---
-volumes: { prometheus-data: { driver: local }, grafana-data: { driver: local } }
+volumes:
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local
+  node_exporter-data:
+    driver: local
+  cadvisor-data:
+    driver: local
+  blackbox-data:
+    driver: local
+
+networks:
+  monitoring-network:
+    driver: bridge
+
 services:
   prometheus:
     image: docker.io/prom/prometheus:v2.54.1
@@ -7,7 +22,7 @@ services:
     ports:
       - 9090:9090
     volumes:
-      - /etc/docker-monitoring/prometheus:/etc/prometheus:ro # Mount only the prometheus.yml file
+      - /etc/prometheus/:/etc/prometheus:ro
       - prometheus-data:/prometheus
     restart: unless-stopped
     command:
@@ -92,7 +107,3 @@ services:
     dns:
       - 8.8.8.8
       - 1.1.1.1
-
-networks:
-  monitoring-network:
-    driver: bridge
