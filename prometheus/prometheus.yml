@@ -28,8 +28,6 @@ scrape_configs:
       - targets:
           - 192.168.100.145:9800
           - 192.168.100.167:9100
-          - https://allexpharma.southtechgroup.com:7098/
-          - https://zzflscaled.southtechgroup.com:99/
 
   - job_name: docker
       # metrics_path defaults to '/metrics'
@@ -42,4 +40,21 @@ scrape_configs:
     static_configs:
       - targets:
           - '192.168.100.145:8080'  # Assuming cAdvisor is running on this IP and port
-          # - '192.168.100.167:8080'  # Uncomment and add other cAdvisor instances as needed
+          - '192.168.100.167:8080'  # Uncomment and add other cAdvisor instances as needed
+  
+  - job_name: 'blackbox'
+    metrics_path: /probe
+    params:
+        module: [http_2xx]
+    static_configs:
+        - targets:
+            - https://github.com
+            - https://google.com
+            - https://hackerrank.com
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.100.145:9115  # The blackbox exporter's real hostname:port.
