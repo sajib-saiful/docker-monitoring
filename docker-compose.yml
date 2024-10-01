@@ -6,7 +6,7 @@ services:
     ports:
       - 9090:9090
     volumes:
-      - /home/admin/docker/:/etc/prometheus:ro
+      - /home/admin/docker/docker-monitoring/:/etc/prometheus:ro
       - prometheus-data:/prometheus
     restart: unless-stopped
     command:
@@ -82,7 +82,7 @@ services:
     ports:
       - "9115:9115"
     volumes:
-      - /etc/prometheus/blackbox/:/config
+      - /home/admin/docker/docker-monitoring/:/config
     restart: unless-stopped
     command:
       - "--config.file=/config/blackbox.yml"
