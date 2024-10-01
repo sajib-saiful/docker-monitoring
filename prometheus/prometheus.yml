@@ -28,7 +28,6 @@ scrape_configs:
       - targets:
           - 192.168.100.145:9800
           - 192.168.100.167:9100
-          - localhost:9115 #Blackbox
 
   - job_name: docker
       # metrics_path defaults to '/metrics'
@@ -41,7 +40,6 @@ scrape_configs:
     static_configs:
       - targets:
           - '192.168.100.145:8080'  # Assuming cAdvisor is running on this IP and port
-          - '192.168.100.167:8080'  # Uncomment and add other cAdvisor instances as needed
   
   - job_name: blackbox
     metrics_path: /probe
@@ -50,8 +48,8 @@ scrape_configs:
       module: [http_2xx]
     static_configs:
     - targets:
-      - https://southtechgroup.com
-      - web:2112/health
+      - https://www.southtechgroup.com
+
     relabel_configs:
     - source_labels: [__address__]
       target_label: __param_target
