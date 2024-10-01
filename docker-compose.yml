@@ -6,7 +6,7 @@ services:
     ports:
       - 9090:9090
     volumes:
-      - /home/admin/docker/docker-monitoring/prometheus:/etc/prometheus/prometheus.yml:ro # Mount only the prometheus.yml file
+      - /etc/docker-monitoring/prometheus:/etc/prometheus/prometheus.yml:ro # Mount only the prometheus.yml file
       - prometheus-data:/prometheus
     restart: unless-stopped
     command:
