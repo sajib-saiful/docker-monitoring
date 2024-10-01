@@ -58,4 +58,4 @@ scrape_configs:
     - source_labels: [__param_target]
       target_label: instance
     - target_label: __address__
-      replacement: blackbox:9115
+      replacement: 192.168.100.145:9115
