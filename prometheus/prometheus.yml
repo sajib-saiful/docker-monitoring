@@ -50,7 +50,7 @@ scrape_configs:
       module: [http_2xx]
     static_configs:
     - targets:
-      - 192.168.100.145:9090
+      - https://southtechgroup.com
       - web:2112/health
     relabel_configs:
     - source_labels: [__address__]
