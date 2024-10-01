@@ -6,7 +6,7 @@ services:
     ports:
       - 9090:9090
     volumes:
-      - /etc/prometheus/:/etc/prometheus:ro
+      - /home/admin/docker/:/etc/prometheus:ro
       - prometheus-data:/prometheus
     restart: unless-stopped
     command:
