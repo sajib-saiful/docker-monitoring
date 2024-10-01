@@ -7,7 +7,7 @@ services:
     ports:
       - 9090:9090
     volumes:
-      - /etc/docker-monitoring/prometheus:/etc/prometheus/prometheus.yml:ro # Mount only the prometheus.yml file
+      - /etc/docker-monitoring/prometheus:/etc/prometheus:ro # Mount only the prometheus.yml file
       - prometheus-data:/prometheus
     restart: unless-stopped
     command:
@@ -83,7 +83,7 @@ services:
     ports:
       - "9115:9115"
     volumes:
-      - /home/admin/docker/docker-monitoring/:/config:ro
+      - /etc/docker-monitoring/:/config:ro
     restart: unless-stopped
     command:
       - "--config.file=/config/blackbox.yml"
