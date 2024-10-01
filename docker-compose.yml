@@ -1,0 +1,97 @@
+---
+services:
+  prometheus:
+    image: docker.io/prom/prometheus:v2.54.1
+    container_name: prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - /etc/prometheus/:/etc/prometheus:ro
+      - prometheus-data:/prometheus
+    restart: unless-stopped
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0" # Limit to 1 CPU core
+          memory: "2048M" # Limit memory to 2 GB
+    networks:
+      - monitoring-network
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+
+  grafana:
+    image: docker.io/grafana/grafana-oss:11.2.0
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0" # Limit to 1 CPU core
+          memory: "2048M" # Limit memory to 2 GB
+    networks:
+      - monitoring-network
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    expose:
+      - 9800
+    networks:
+      - monitoring-network
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    ports:
+      - "8080:8080"  # Expose cAdvisor UI on port 8080
+    volumes:
+      - /var/run:/var/run:rw
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /sys:/sys:ro
+      - /:/rootfs:ro
+    restart: unless-stopped
+    networks:
+      - monitoring-network
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+
+  blackbox-exporter:
+    image: quay.io/prometheus/blackbox-exporter:latest
+    container_name: blackbox-exporter
+    ports:
+      - "9115:9115"
+    volumes:
+      - /etc/prometheus/blackbox/:/config
+    restart: unless-stopped
+    command:
+      - "--config.file=/config/blackbox.yml"
+    networks:
+      - monitoring-network
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+
+networks:
+  monitoring-network:
+    driver: bridge
