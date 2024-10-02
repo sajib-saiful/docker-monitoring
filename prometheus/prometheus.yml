@@ -63,6 +63,12 @@ scrape_configs:
       - https://amepos.southtechgroup.com:9080
       - https://amepos.southtechgroup.com:9081
       - https://amepos.southtechgroup.com:9082
+      - https://wazibpharma.southtechgroup.com:4098
+      - https://wazibpharma.southtechgroup.com:4099
+      - https://wazibpharma.southtechgroup.com:4097
+      - https://rmepos.southtechgroup.com:5020
+      - http://rmepos.southtechgroup.com:5021
+      - https://rmepos.southtechgroup.com:5022
 
     relabel_configs:
     - source_labels: [__address__]
